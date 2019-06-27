@@ -1,7 +1,10 @@
 /*
  * 创建一个包含所有卡片的数组
  */
-
+var pictures = ["fa-user", "fa-user", "fa-tree", "fa-tree"
+				"fa-television", "fa-television", "fa-bell", "fa-bell",
+				"fa-coffee", "fa-coffee", "fa-cog", "fa-cog",
+				"fa-clone", "fa-clone", "fa-heart-o", "fa-heart-o"];
 
 /*
  * 显示页面上的卡片
