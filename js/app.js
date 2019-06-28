@@ -5,6 +5,7 @@ var pictures = ["fa-user", "fa-user", "fa-tree", "fa-tree",
 				"fa-television", "fa-television", "fa-bell", "fa-bell",
 				"fa-coffee", "fa-coffee", "fa-cog", "fa-cog",
 				"fa-clone", "fa-clone", "fa-heart-o", "fa-heart-o"];
+var openCardsArray = [];//定义一个空的数组作为翻开的卡片数组
 
 /*
  * 显示页面上的卡片
@@ -26,7 +27,6 @@ $(".fa-repeat").click(function(e) {
     }
     $(".wangge").empty();//清空原卡片网格
     $(".wangge").append(cardsFrag);//添加随机过的卡片网格
-    //此处还需要一个计时的起点
 });
 
 // 洗牌函数来自于 http://stackoverflow.com/a/2450976
@@ -44,6 +44,39 @@ function shuffle(array) {
     return array;
 }
 
+//设置一个计时器函数
+function countTimes() {
+    let seconds = 0;
+    $('body').everyTime('1s', 'jishiqi', function() {
+        seconds += 1;
+    });
+}
+
+//点击卡片后翻开，添加到openCardsArray数组
+function openCard(obj) {
+    obj.addClass("open show");
+    openCardsArray.push(obj);
+}
+
+//检查两张卡片是否匹配，匹配则添加类match，否则剔出open数组
+function isMatching(cardOne, cardTwo) {
+    if (cardOne.classList[1] === cardTwo.classList[1]) {//如果匹配，则保留类match
+        cardOne.removeClass("open show");
+        cardTwo.removeClass("open show");
+        cardOne.addClass("match");
+        cardTwo.addClass("match");
+    } else {                                            //如果不匹配，则翻回去，并从openCardsArray里删除
+        cardOne.removeClass("open show");
+        cardTwo.removeClass("open show");
+        openCardsArray.pop();
+        openCardsArray.pop();        
+    }    
+}
+
+//计算步数
+
+
+//统计所有卡片是否都已经匹配
 
 /*
  * 设置一张卡片的事件监听器。 如果该卡片被点击：
