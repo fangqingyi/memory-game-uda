@@ -74,7 +74,7 @@ h1 {
 	height: 125px;
 	width: 150px;
 	background: #2e3d49;
-	font-size: 30px;/*大小设置为0作为隐藏*/
+	font-size: 0;/*大小设置为0作为隐藏*/
 	color: white;
 	border-radius: 8px;
 	cursor: pointer;
@@ -98,4 +98,8 @@ h1 {
 	cursor: default;
 	background: #02ccba;
 	font-size: 33px;/*匹配上后大小为33*/
+}
+
+#myModal {
+	display: none;/*模态框隐藏*/
 }
