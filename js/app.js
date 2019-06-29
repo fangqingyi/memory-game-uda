@@ -73,6 +73,15 @@ function isMatching(cardOne, cardTwo) {
 }
 
 //统计所有卡片是否都已经匹配
+function isGameover() {
+    const matchCards = document.querySlectorAll(".match");
+    const numberOfMatchCards = matchCards.length();
+    if (numberOfMatchCards === 16) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 /*
  * 设置一张卡片的事件监听器。 如果该卡片被点击：
