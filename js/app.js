@@ -75,8 +75,7 @@ function isMatching(cardOne, cardTwo) {
 //统计所有卡片是否都已经匹配
 function isGameover() {
     const matchCards = document.querySlectorAll(".match");
-    const numberOfMatchCards = matchCards.length();
-    if (numberOfMatchCards === 16) {
+    if (matchCards.length === 16) {
         return true;
     } else {
         return false;
@@ -96,25 +95,38 @@ var countMoves = 0;//初始步数为0
  *    + 增加移动计数器并将其显示在页面上（将这个功能放在你从这个函数中调用的另一个函数中）
  *    + 如果所有卡都匹配，则显示带有最终分数的消息（将这个功能放在你从这个函数中调用的另一个函数中）
  */
-$(".card").click(function(){
-    if (!isCountTime) {     //第一步打开计时器
-
+$(".card").click(function(e){
+    if (!isCountTime) {                     //第一步打开计时器
+        var seconds = 0;
+        $('body').everyTime('1s', 'jishiqi', function() {
+            seconds += 1;
+        });
+        isCountTime = true;
     }
-    if (openCardsArray.length ===2 ) {     //判断有效点击，如果有卡片正在匹配，则不可点击
+    isGameover();                    //判断游戏是否结束
+    if (isGameover) {               //如果游戏结束，则没有点击效果，且停止计时
+        $('body').stopTime('jishiqi');
+        isCountTime = false;
+        return;
+    }
+    if (openCardsArray.length === 2 ) {     //判断有效点击，如果有卡片正在匹配，则不可点击
         return;
     }
     countMoves += 1; //有效点击次数+1
-    if () {      //判断有效点击次数的值，达到22，27步时减少一个星级
-
+    if (countMoves === 23 || countMoves === 28) {      //判断有效点击次数的值，达到23，28步时减少一个星级
+        $('.fa-star')[0].remove();
+        let movesText = document.getElementsByClassName("moves");
+        movesText.textContent = `${$('.fa-star').length}`;  //显示星星的数目
     }
-    openCard();//调用函数翻开卡片
-    isMatching();//判断卡片是否匹配
-    isGameover();//判断游戏是否结束
+    openCard(this);                     //调用函数翻开卡片
+    isMatching(openCardsArray[0], openCardsArray[1]);      //判断卡片是否匹配
 });
 
 /*游戏结束后，弹窗显示步数，时间，星级，以及是否继续游戏，
   如果继续，则
   清零步数，
   恢复星级，
-  关闭计时开关，
   刷新卡片网格*/
+function afterGameover() {
+    
+}
