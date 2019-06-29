@@ -44,37 +44,33 @@ function shuffle(array) {
     return array;
 }
 
-//设置一个计时器函数
-function countTimes() {
-    let seconds = 0;
-    $('body').everyTime('1s', 'jishiqi', function() {
-        seconds += 1;
-    });
-}
-
 //点击卡片后翻开，添加到openCardsArray数组
 function openCard(obj) {
     obj.addClass("open show");
     openCardsArray.push(obj);
+    return 1;
 }
 
-//检查两张卡片是否匹配，匹配则添加类match，否则剔出open数组
+//检查两张卡片是否匹配，匹配则添加类match
 function isMatching(cardOne, cardTwo) {
     if (cardOne.classList[1] === cardTwo.classList[1]) {//如果匹配，则保留类match
         cardOne.removeClass("open show");
         cardTwo.removeClass("open show");
         cardOne.addClass("match");
         cardTwo.addClass("match");
-    } else {                                            //如果不匹配，则翻回去，并从openCardsArray里删除
+        openCardsArray.pop();
+        openCardsArray.pop();
+        cardOne.off('click');                           //匹配成功的卡片去除点击事件
+        cardTwo.off('click');
+        return true;
+    } else {                                            //如果不匹配，则翻回去
         cardOne.removeClass("open show");
         cardTwo.removeClass("open show");
         openCardsArray.pop();
-        openCardsArray.pop();        
-    }    
+        openCardsArray.pop();
+        return false;
+    }
 }
-
-//计算步数
-
 
 //统计所有卡片是否都已经匹配
 
