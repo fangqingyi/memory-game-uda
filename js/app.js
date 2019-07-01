@@ -9,8 +9,8 @@ var openCardsArray = [];//定义一个空的数组作为翻开的卡片数组
 var countMoves = 0;//初始步数为0
 var isGameover = false;//判断游戏状态为未完成
 var isCountTime = false;//计时器状态为关闭，或者考虑new Date()?
-var numOfStars = 3;
-var startTimeS = 0;
+var numOfStars = 3;//初始星星3颗
+var startTimeS = 0;//定义初始时间
 /*
  * 显示页面上的卡片
  *   - 使用下面提供的 "shuffle" 方法对数组中的卡片进行洗牌
@@ -31,6 +31,10 @@ $(".fa-repeat").click(function(e) {
     }
     $(".wangge").empty();//清空原卡片网格
     $(".wangge").append(cardsFrag);//添加随机过的卡片网格
+    reStarsMoves();
+    countMoves = 0;
+    isGameover = false;
+    isCountTime = false;
 });
 
 // 洗牌函数来自于 http://stackoverflow.com/a/2450976
@@ -46,6 +50,23 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+//一个在游戏结束后重置stars和moves的函数
+function reStarsMoves() {
+    let starsFrag = document.createDocumentFragment();
+    for (var i = 0; i < 3; i++) {
+        const starLi = document.createElement('li');
+        const starFa = document.createElement('i');
+        starFa.classList.add('fa');
+        starFa.classList.add('fa-star');
+        starLi.appendChild(starFa);
+        starsFrag.appendChild(starLi);
+    }
+    const starsList = document.querySelector('.stars');
+    starsList.innerHTML = "";
+    starsList.appendChild(starsFrag);
+    document.querySelector('.moves').textContent = 0;
 }
 
 //点击卡片后翻开，添加到openCardsArray数组
@@ -67,11 +88,23 @@ function isCardsMatching(x, y) {
         openCardsArray.pop();
         openCardsArray.pop();
     } else {
+        x.style.backgroundColor = "red";
+        y.style.backgroundColor = "red";
+        x.classList.add('animated');
+        y.classList.add('animated');
+        x.classList.add('pulse');
+        y.classList.add('pulse');
         setTimeout(function() {
             x.classList.remove('open');
             x.classList.remove('show');
             y.classList.remove('open');
             y.classList.remove('show');
+            x.classList.remove('animated');
+            y.classList.remove('animated');
+            x.classList.remove('pulse');
+            y.classList.remove('pulse');
+            x.style.backgroundColor = "#2e3d49";
+            y.style.backgroundColor = "#2e3d49";
             openCardsArray.pop();
             openCardsArray.pop();
         }, 1500);
