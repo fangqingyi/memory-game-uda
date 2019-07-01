@@ -22,16 +22,16 @@ $(".fa-repeat").click(function(e) {
     let cardsFrag = document.createDocumentFragment(); //利用Fragment构建新的卡片网格
     for (var i = newPic.length - 1; i >= 0; i--) {
         let cardLi = document.createElement("li");
-        cardLi.classList.add("card");//创建类为card的li元素
+        cardLi.classList.add("card");
         let cardFa = document.createElement("i");
         cardFa.classList.add("fa");
-        cardFa.classList.add(newPic[i]);//创建类为fa fa-***的i元素
+        cardFa.classList.add(newPic[i]);
         cardLi.appendChild(cardFa);
-        cardsFrag.appendChild(cardLi);//加入到Fragment中
+        cardsFrag.appendChild(cardLi);
     }
-    $(".wangge").empty();//清空原卡片网格
-    $(".wangge").append(cardsFrag);//添加随机过的卡片网格
-    reStarsMoves();
+    $(".wangge").empty();
+    $(".wangge").append(cardsFrag);
+    reStarsMoves();//这四行是重置数据
     countMoves = 0;
     isGameover = false;
     isCountTime = false;
@@ -58,8 +58,7 @@ function reStarsMoves() {
     for (var i = 0; i < 3; i++) {
         const starLi = document.createElement('li');
         const starFa = document.createElement('i');
-        starFa.classList.add('fa');
-        starFa.classList.add('fa-star');
+        starFa.setAttribute('class', 'fa fa-star');
         starLi.appendChild(starFa);
         starsFrag.appendChild(starLi);
     }
@@ -71,43 +70,29 @@ function reStarsMoves() {
 
 //点击卡片后翻开，添加到openCardsArray数组
 function openCard(x) {
-    x.classList.add('show');
-    x.classList.add('open');
+    x.setAttribute('class', 'card show open');
+    x.style.backgroundColor = "#02b3e4";
     openCardsArray.push(x);
 }
 
 //检查两张卡片是否匹配，匹配则添加类match
 function isCardsMatching(x, y) {
     if (x.firstElementChild.classList[1] === y.firstElementChild.classList[1]) {
-        x.classList.add('match');
-        y.classList.add('match');
-        x.classList.remove('open');
-        x.classList.remove('show');
-        y.classList.remove('open');
-        y.classList.remove('show');
-        openCardsArray.pop();
-        openCardsArray.pop();
+        x.setAttribute('class', 'card match');
+        y.setAttribute('class', 'card match');
+        openCardsArray = [];
     } else {
         x.style.backgroundColor = "red";
         y.style.backgroundColor = "red";
-        x.classList.add('animated');
-        y.classList.add('animated');
-        x.classList.add('pulse');
-        y.classList.add('pulse');
+        x.setAttribute('class', 'card show open animated pulse');
+        y.setAttribute('class', 'card show open animated pulse');
         setTimeout(function() {
-            x.classList.remove('open');
-            x.classList.remove('show');
-            y.classList.remove('open');
-            y.classList.remove('show');
-            x.classList.remove('animated');
-            y.classList.remove('animated');
-            x.classList.remove('pulse');
-            y.classList.remove('pulse');
+            x.setAttribute('class', 'card');
+            y.setAttribute('class', 'card');
             x.style.backgroundColor = "#2e3d49";
             y.style.backgroundColor = "#2e3d49";
-            openCardsArray.pop();
-            openCardsArray.pop();
-        }, 1500);
+            openCardsArray = [];
+        }, 1000);
     }
 }
 
@@ -124,8 +109,7 @@ function starsMoves(x) {
     const numOfMoves = document.querySelector('.moves');
     numOfMoves.textContent = x
     if (x ===23 || x === 29) {
-        const aStar = document.querySelector('.fa-star');
-        aStar.remove();
+        document.querySelector('.fa-star').remove();
         numOfStars = document.querySelectorAll('.fa-star').length;
     }
 }
@@ -156,7 +140,7 @@ function afterGame(x, y) {
  */
 const cardWangge = document.querySelector('.wangge');
 cardWangge.addEventListener('click', function(eve) {   //监听器放在父元素<ul>上
-    if (eve.target.nodeName.toLowerCase() === 'li' && !(eve.target.classList.contains('open'))) { //点击在card上，且card不是open状态
+    if (eve.target.nodeName.toLowerCase() === 'li' && !(eve.target.classList.contains('open'))) {     //点击在card上，且card不是open状态
         if (!isCountTime) {                            //打开计时器，获取开始游戏的时间
             const startTime = new Date();
             startTimeS = startTime.getTime();
@@ -168,7 +152,7 @@ cardWangge.addEventListener('click', function(eve) {   //监听器放在父元�
         if (isGameover) {                 //游戏结束也不能点击
             return;
         }
-        countMoves += 1;       //有效点击次数+1
+        countMoves += 1;
         starsMoves(countMoves);
         openCard(eve.target);
         if (openCardsArray.length === 2) {
