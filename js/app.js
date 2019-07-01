@@ -7,8 +7,10 @@ var pictures = ["fa-user", "fa-user", "fa-tree", "fa-tree",
 				"fa-clone", "fa-clone", "fa-heart-o", "fa-heart-o"];
 var openCardsArray = [];//定义一个空的数组作为翻开的卡片数组
 var countMoves = 0;//初始步数为0
-var isGameOver = false;//判断游戏状态为未完成
+var isGameover = false;//判断游戏状态为未完成
 var isCountTime = false;//计时器状态为关闭，或者考虑new Date()?
+var numOfStars = 3;
+var startTimeS = 0;
 /*
  * 显示页面上的卡片
  *   - 使用下面提供的 "shuffle" 方法对数组中的卡片进行洗牌
@@ -47,13 +49,67 @@ function shuffle(array) {
 }
 
 //点击卡片后翻开，添加到openCardsArray数组
-
+function openCard(x) {
+    x.classList.add('show');
+    x.classList.add('open');
+    openCardsArray.push(x);
+}
 
 //检查两张卡片是否匹配，匹配则添加类match
-
+function isCardsMatching(x, y) {
+    if (x.firstElementChild.classList[1] === y.firstElementChild.classList[1]) {
+        x.classList.add('match');
+        y.classList.add('match');
+        x.classList.remove('open');
+        x.classList.remove('show');
+        y.classList.remove('open');
+        y.classList.remove('show');
+        openCardsArray.pop();
+        openCardsArray.pop();
+    } else {
+        setTimeout(function() {
+            x.classList.remove('open');
+            x.classList.remove('show');
+            y.classList.remove('open');
+            y.classList.remove('show');
+            openCardsArray.pop();
+            openCardsArray.pop();
+        }, 1500);
+    }
+}
 
 //统计所有卡片是否都已经匹配
+function isGameOver() {
+    const matchingCards = document.querySelectorAll('.match');
+    if (matchingCards.length === 16) {
+        isGameover = true;
+    }
+}
 
+//减去星级,显示点击数的函数
+function starsMoves(x) {
+    const numOfMoves = document.querySelector('.moves');
+    numOfMoves.textContent = x
+    if (x ===23 || x === 29) {
+        const aStar = document.querySelector('.fa-star');
+        aStar.remove();
+        numOfStars = document.querySelectorAll('.fa-star').length;
+    }
+}
+
+//一个结束时的函数显示成绩
+function afterGame(x, y) {
+    const endTime = new Date();
+    const endTimeS = endTime.getTime();
+    const spendingTime = (endTimeS - x)/1000;
+    const textGrade = "You win the game, spending " + spendingTime + "seconds, " + countMoves + "moves, and get " + y + "star(s)!";
+    swal({
+        title: "Good job!",
+        text: textGrade,
+        icon: "success",
+        button: "Click the Button Upright to Play Again",
+    });
+}
 
 /*
  * 设置一张卡片的事件监听器。 如果该卡片被点击：
@@ -65,8 +121,29 @@ function shuffle(array) {
  *    + 增加移动计数器并将其显示在页面上（将这个功能放在你从这个函数中调用的另一个函数中）
  *    + 如果所有卡都匹配，则显示带有最终分数的消息（将这个功能放在你从这个函数中调用的另一个函数中）
  */
-const cardsWangge = document.getElementsByClassName('wangge');
-cardsWangge.addEventListener('click', function(event) {         //把侦听器放在网格上，可以只放一个
-    if (event.nodeName.toLowerCase() === 'li') {                //点击类为card的元素（也就是<li>）时才启动
+const cardWangge = document.querySelector('.wangge');
+cardWangge.addEventListener('click', function(eve) {   //监听器放在父元素<ul>上
+    if (eve.target.nodeName.toLowerCase() === 'li' && !(eve.target.classList.contains('open'))) { //点击在card上，且card不是open状态
+        if (!isCountTime) {                            //打开计时器，获取开始游戏的时间
+            const startTime = new Date();
+            startTimeS = startTime.getTime();
+            isCountTime = true;
+        }
+        if (openCardsArray.length === 2) {    //在匹配时不能点击
+            return;
+        }
+        if (isGameover) {                 //游戏结束也不能点击
+            return;
+        }
+        countMoves += 1;       //有效点击次数+1
+        starsMoves(countMoves);
+        openCard(eve.target);
+        if (openCardsArray.length === 2) {
+            isCardsMatching(openCardsArray[0], openCardsArray[1]);
+        }
+        isGameOver();
+        if (isGameover) {
+            afterGame(startTimeS, numOfStars);
+        }
     }
 });
