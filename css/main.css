@@ -37,7 +37,7 @@ h1 {
 	margin: 0 0 15px 0;
 	padding: 0;
 	text-align: left;
-	width: 350px;
+	width: 320px;
 }
 
 .score-panel .stars li {
@@ -98,4 +98,14 @@ h1 {
 	cursor: default;
 	background: #02ccba;
 	font-size: 33px;/*匹配上后大小为33*/
+}
+
+@media screen and (min-width: 320px) and (max-width: 540px) {
+	.wangge {width: 320px;}
+	.wangge .card {width: 73px;}
+}
+
+@media screen and (min-width: 541px) and (max-width: 725px) {
+	.wangge {width: 520px;}
+	.wangge .card {width: 120px;}
 }
