@@ -1,16 +1,17 @@
 /*
  * 创建一个包含所有卡片的数组
  */
-var pictures = ["fa-user", "fa-user", "fa-tree", "fa-tree",
-				"fa-television", "fa-television", "fa-bell", "fa-bell",
-				"fa-coffee", "fa-coffee", "fa-cog", "fa-cog",
-				"fa-clone", "fa-clone", "fa-heart-o", "fa-heart-o"];
-var openCardsArray = [];//定义一个空的数组作为翻开的卡片数组
-var countMoves = 0;//初始步数为0
-var isGameover = false;//判断游戏状态为未完成
-var isCountTime = false;//计时器状态为关闭，或者考虑new Date()?
-var numOfStars = 3;//初始星星3颗
-var startTimeS = 0;//定义初始时间
+let pictures = ["fa-user", "fa-tree",
+				"fa-television", "fa-bell",
+				"fa-coffee", "fa-cog",
+				"fa-clone", "fa-heart-o"];
+pictures = pictures.concat(pictures);
+let openCardsArray = [];//定义一个空的数组作为翻开的卡片数组
+let countMoves = 0;//初始步数为0
+let isGameover = false;//判断游戏状态为未完成
+let isCountTime = false;//计时器状态为关闭，或者考虑new Date()?
+let numOfStars = 3;//初始星星3颗
+let startTimeS = 0;//定义初始时间
 /*
  * 显示页面上的卡片
  *   - 使用下面提供的 "shuffle" 方法对数组中的卡片进行洗牌
@@ -18,9 +19,13 @@ var startTimeS = 0;//定义初始时间
  *   - 将每张卡的 HTML 添加到页面
  */
 $(".fa-repeat").click(function(e) {
-    var newPic = shuffle(pictures);        //卡片数组随机化
+    initial();
+});
+
+function initial() {
+    let newPic = shuffle(pictures);        //卡片数组随机化
     let cardsFrag = document.createDocumentFragment(); //利用Fragment构建新的卡片网格
-    for (var i = newPic.length - 1; i >= 0; i--) {
+    for (let i = newPic.length - 1; i >= 0; i--) {
         let cardLi = document.createElement("li");
         cardLi.classList.add("card");
         let cardFa = document.createElement("i");
@@ -35,7 +40,7 @@ $(".fa-repeat").click(function(e) {
     countMoves = 0;
     isGameover = false;
     isCountTime = false;
-});
+}
 
 // 洗牌函数来自于 http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -164,3 +169,5 @@ cardWangge.addEventListener('click', function(eve) {   //监听器放在父元�
         }
     }
 });
+
+initial();
