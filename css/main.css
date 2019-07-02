@@ -101,11 +101,11 @@ h1 {
 }
 
 @media screen and (min-width: 320px) and (max-width: 540px) {
-	.wangge {width: 320px;}
+	.wangge {width: 320px; height: 340px;}
 	.wangge .card {width: 73px;}
 }
 
 @media screen and (min-width: 541px) and (max-width: 725px) {
-	.wangge {width: 520px;}
+	.wangge {width: 520px; min-height: 540px;}
 	.wangge .card {width: 120px;}
 }
